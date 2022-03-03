@@ -31,18 +31,11 @@ const App: FC = () => {
 		[setItems],
 	);
 
-	/*const moveItem = useCallback((dragIndex: number, hoverIndex: number) => {
-		setItems((prevItems: ListItem[]) =>
-			produce(prevItems, (draft) => {
-				draft.splice(hoverIndex, 0, draft[dragIndex]);
-			}),
-		);
-	}, []);*/
 	return (
 		<Root>
 			<FormWrapper>
 				<TodoForm onAdd={addItem} />
-				<TodoList onRemove={removeItem} items={items} />
+				<TodoList onRemove={removeItem} items={items} setItems={setItems} />
 			</FormWrapper>
 		</Root>
 	);
