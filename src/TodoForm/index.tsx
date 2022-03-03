@@ -1,3 +1,4 @@
+import { Button, Input } from '@mui/material';
 import { ChangeEvent, FC, FormEvent, useState } from 'react';
 import styled from 'styled-components/macro';
 import { v4 as uuid } from 'uuid';
@@ -24,8 +25,15 @@ const TodoForm: FC<Props> = ({ onAdd }) => {
 	return (
 		<Root>
 			<Form onSubmit={handleAdd}>
-				<input type='text' value={inputValue} onChange={setInputValue} />
-				<button type='submit'>Добавить</button>
+				<Input
+					className='form-input'
+					type='text'
+					value={inputValue}
+					onChange={setInputValue}
+				/>
+				<Button className='app-button' variant='contained' type='submit'>
+					Добавить
+				</Button>
 			</Form>
 		</Root>
 	);
@@ -34,8 +42,11 @@ const TodoForm: FC<Props> = ({ onAdd }) => {
 const Root = styled.div``;
 const Form = styled.form`
 	display: flex;
-	input {
-		flex: 1;
+	justify-content: space-between;
+	padding: 10px;
+	.form-input {
+		max-width: calc(100% - 180px);
+		width: 100%;
 	}
 `;
 

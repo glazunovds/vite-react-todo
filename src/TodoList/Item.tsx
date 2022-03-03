@@ -1,3 +1,6 @@
+import DeleteIcon from '@mui/icons-material/Delete';
+import { SvgIcon } from '@mui/material';
+import { pink } from '@mui/material/colors';
 import { Identifier, XYCoord } from 'dnd-core';
 import { FC, useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
@@ -74,9 +77,15 @@ export const Item: FC<ItemProps> = ({ id, value, onRemove, index, moveItem }) =>
 		<Div vis={opacity} ref={ref} data-handler-id={handlerId}>
 			<Li>
 				<div>{value}</div>
-				<button type='button' onClick={handleRemove}>
-					Удалить
-				</button>
+				<SvgIcon
+					component={DeleteIcon}
+					sx={{ color: pink[500] }}
+					className='app-icon'
+					type='button'
+					onClick={handleRemove}
+				>
+					<></>
+				</SvgIcon>
 			</Li>
 		</Div>
 	);

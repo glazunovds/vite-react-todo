@@ -1,3 +1,4 @@
+import { Card } from '@mui/material';
 import { FC, useCallback, useState } from 'react';
 import styled from 'styled-components/macro';
 
@@ -33,10 +34,14 @@ const App: FC = () => {
 
 	return (
 		<Root>
-			<FormWrapper>
-				<TodoForm onAdd={addItem} />
-				<TodoList onRemove={removeItem} items={items} setItems={setItems} />
-			</FormWrapper>
+			<Card className='app-card'>
+				<FormWrapper>
+					<FormHeader>Список дел:</FormHeader>
+
+					<TodoForm onAdd={addItem} />
+					<TodoList onRemove={removeItem} items={items} setItems={setItems} />
+				</FormWrapper>
+			</Card>
 		</Root>
 	);
 };
@@ -45,15 +50,21 @@ const Root = styled.div`
 	background: rgba(0, 46, 150, 0.2);
 	height: 100%;
 	padding-top: 100px;
+	.app-card {
+		width: 500px;
+		height: auto;
+		display: flex;
+		flex-direction: column;
+		background: white;
+		margin: 0 auto;
+	}
 `;
 
-const FormWrapper = styled.div`
-	width: 500px;
-	height: auto;
-	display: flex;
-	flex-direction: column;
-	background: white;
-	margin: 0 auto;
+const FormHeader = styled.div`
+	text-align: center;
+	font-size: 24px;
 `;
+
+const FormWrapper = styled.div``;
 
 export default App;
