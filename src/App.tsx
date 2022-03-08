@@ -1,4 +1,5 @@
 import { Card } from '@mui/material';
+import produce from 'immer';
 import { FC, useCallback, useState } from 'react';
 import styled from 'styled-components/macro';
 
@@ -13,10 +14,11 @@ export interface ListItem {
 const App: FC = () => {
 	const [items, setItems] = useState<ListItem[]>([]);
 	const addItem = useCallback(
-		(item) => {
-			setItems((items) => {
-				items.push(item);
-				return [...items];
+		(item: ListItem) => {
+			setItems((oldItems) => {
+				return produce(oldItems, (draft) => {
+					draft.push(item);
+				});
 			});
 		},
 		[setItems],
@@ -24,9 +26,10 @@ const App: FC = () => {
 
 	const removeItem = useCallback(
 		(item: ListItem) => {
-			setItems((items) => {
-				items = items.filter((e) => e.id !== item.id);
-				return items;
+			setItems((oldItems) => {
+				return produce(oldItems, (draft) => {
+					draft.filter((e) => e.id !== item.id);
+				});
 			});
 		},
 		[setItems],

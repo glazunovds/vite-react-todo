@@ -1,7 +1,9 @@
 import DeleteIcon from '@mui/icons-material/Delete';
-import { SvgIcon } from '@mui/material';
+import { CircularProgress, SvgIcon } from '@mui/material';
 import { pink } from '@mui/material/colors';
+import useAxios from 'axios-hooks';
 import { Identifier, XYCoord } from 'dnd-core';
+import { Images } from 'giphy-api';
 import { FC, useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import styled from 'styled-components/macro';
@@ -62,7 +64,7 @@ export const Item: FC<ItemProps> = ({ id, value, onRemove, index, moveItem }) =>
 		item: () => {
 			return { id, index };
 		},
-		collect: (monitor: any) => ({
+		collect: (monitor) => ({
 			isDragging: monitor.isDragging(),
 		}),
 	});
@@ -73,10 +75,32 @@ export const Item: FC<ItemProps> = ({ id, value, onRemove, index, moveItem }) =>
 		onRemove({ id: id, value: value });
 	};
 
+	const [{ data, loading, error }] = useAxios<{ data: { images: Images } }>(
+		`https://api.giphy.com/v1/gifs/random?api_key=${
+			import.meta.env.VITE_GIPHY_API_KEY
+		}&rating=g&tag=${encodeURIComponent(value)}`,
+		{ useCache: false },
+	);
+
 	return (
-		<Div vis={opacity} ref={ref} data-handler-id={handlerId}>
+		<Div vis={opacity} loadingPOSHELNAHUI={loading} ref={ref} data-handler-id={handlerId}>
 			<Li>
-				<div>{value}</div>
+				<div className='first-wrapper'>
+					<div className='app-image'>
+						<div className='overlay giphy-image' />
+						<CircularProgress className='app-loader' />
+						<img
+							src={
+								!loading && !!data?.data.images
+									? data?.data.images.fixed_height_small.url
+									: 'https://sun9-8.userapi.com/impf/RnJL30b5vRYl3Ga3nfnRU7XjrjcwWqyYFFVl1w/WTERrlQLYLU.jpg?size=313x311&quality=96&sign=9c161e962e5f433402dc550b46f0af64&type=album'
+							}
+							alt=''
+							className='giphy-image'
+						/>
+					</div>
+					<div>{value}</div>
+				</div>
 				<SvgIcon
 					component={DeleteIcon}
 					sx={{ color: pink[500] }}
@@ -96,7 +120,7 @@ const Li = styled.li`
 	justify-content: space-between;
 `;
 
-const Div = styled.div<{ vis: number }>`
+const Div = styled.div<{ vis: number; loadingPOSHELNAHUI: boolean }>`
 	border: 1px dashed gray;
 	padding: 0.5rem 1rem;
 	margin-bottom: 0.5rem;
@@ -104,4 +128,39 @@ const Div = styled.div<{ vis: number }>`
 	cursor: move;
 	user-select: none;
 	opacity: ${({ vis }) => vis};
+
+	.first-wrapper {
+		display: inline-flex;
+		flex: 1;
+	}
+
+	.app-image {
+		position: relative;
+
+		.overlay {
+			position: absolute;
+			background: white;
+			z-index: 1;
+			display: ${({ loadingPOSHELNAHUI }) => (!loadingPOSHELNAHUI ? 'none' : 'block')};
+		}
+
+		.giphy-image {
+			width: 50px;
+			height: 50px;
+			min-width: 50px;
+			min-height: 50px;
+			padding-right: 10px;
+		}
+
+		.app-loader {
+			position: absolute;
+			background: white;
+			z-index: 1;
+			display: ${({ loadingPOSHELNAHUI }) => (!loadingPOSHELNAHUI ? 'none' : 'block')};
+			width: 25px !important;
+			height: 25px !important;
+			left: 12px;
+			top: 12px;
+		}
+	}
 `;

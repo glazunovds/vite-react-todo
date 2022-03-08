@@ -13,7 +13,8 @@ const GlobalStyle = createGlobalStyle`
 	}
 	
 	* {
-		font-family: 'Roboto',serif;
+		font-family: "Comic Sans MS",serif !important;
+		//font-family: Roboto,serif;
 	}
 	
 	#root {
